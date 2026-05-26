@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TipSplit — Bill & Tip Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="noise"></div>
+
+    <header class="site-header">
+      <div class="logo">
+        <span class="logo-icon" aria-hidden="true">⌗</span>
+        <span class="logo-text">TipSplit</span>
+      </div>
+      <p class="tagline">Split bills without the awkward math</p>
+    </header>
+
+    <main class="calculator" role="main">
+      <!-- ── LEFT PANEL: INPUTS ── -->
+      <section class="panel panel--input" aria-label="Calculator inputs">
+
+        <!-- Bill Amount -->
+        <div class="field-group" id="group-bill">
+          <label class="field-label" for="bill">
+            Bill Amount
+            <span class="currency-badge">Rs</span>
+          </label>
+          <div class="input-wrapper">
+            <span class="input-prefix" aria-hidden="true">Rs</span>
+            <input
+              type="number"
+              id="bill"
+              class="field-input"
+              placeholder="0.00"
+              min="0.01"
+              step="0.01"
+              inputmode="decimal"
+              autocomplete="off"
+              aria-describedby="bill-error"
+              aria-invalid="false"
+            />
+          </div>
+          <p class="field-error" id="bill-error" role="alert" aria-live="polite"></p>
+        </div>
+
+        <!-- Tip Percentage -->
+        <div class="field-group" id="group-tip">
+          <label class="field-label" for="tip-custom">Tip Percentage</label>
+          <div class="preset-buttons" role="group" aria-label="Tip presets">
+            <button class="preset-btn" data-tip="5" type="button" aria-pressed="false">5%</button>
+            <button class="preset-btn" data-tip="10" type="button" aria-pressed="false">10%</button>
+            <button class="preset-btn" data-tip="15" type="button" aria-pressed="false">15%</button>
+            <button class="preset-btn" data-tip="20" type="button" aria-pressed="false">20%</button>
+            <button class="preset-btn" data-tip="25" type="button" aria-pressed="false">25%</button>
+          </div>
+          <div class="input-wrapper input-wrapper--tip">
+            <input
+              type="number"
+              id="tip-custom"
+              class="field-input"
+              placeholder="Custom %"
+              min="0"
+              max="100"
+              step="1"
+              inputmode="decimal"
+              autocomplete="off"
+              aria-describedby="tip-error"
+              aria-invalid="false"
+              aria-label="Custom tip percentage"
+            />
+            <span class="input-suffix" aria-hidden="true">%</span>
+          </div>
+          <p class="field-error" id="tip-error" role="alert" aria-live="polite"></p>
+        </div>
+
+        <!-- Number of People -->
+        <div class="field-group" id="group-people">
+          <label class="field-label" for="people">Number of People</label>
+          <div class="people-row">
+            <button
+              class="stepper-btn"
+              id="people-dec"
+              type="button"
+              aria-label="Decrease number of people"
+            >−</button>
+            <div class="input-wrapper input-wrapper--people">
+              <input
+                type="number"
+                id="people"
+                class="field-input field-input--center"
+                value="1"
+                min="1"
+                max="999"
+                step="1"
+                inputmode="numeric"
+                autocomplete="off"
+                aria-describedby="people-error"
+                aria-invalid="false"
+              />
+            </div>
+            <button
+              class="stepper-btn"
+              id="people-inc"
+              type="button"
+              aria-label="Increase number of people"
+            >+</button>
+          </div>
+          <p class="field-error" id="people-error" role="alert" aria-live="polite"></p>
+        </div>
+
+        <!-- Reset -->
+        <button class="reset-btn" id="reset" type="button" aria-label="Reset calculator">
+          <span class="reset-icon" aria-hidden="true">↺</span> Reset
+        </button>
+      </section>
+
+      <!-- ── RIGHT PANEL: OUTPUT ── -->
+      <section class="panel panel--output" aria-label="Calculation results" aria-live="polite">
+        <div class="output-header">
+          <span class="output-label">Your split</span>
+        </div>
+
+        <div class="output-grid">
+          <div class="output-row">
+            <div class="output-desc">
+              <span class="output-title">Tip Amount</span>
+              <span class="output-sub">per person</span>
+            </div>
+            <div class="output-value" id="out-tip-per-person" aria-label="Tip per person">
+              <span class="value-currency">Rs</span
+              ><span class="value-number" id="val-tip-per">0.00</span>
+            </div>
+          </div>
+
+          <div class="output-divider" aria-hidden="true"></div>
+
+          <div class="output-row">
+            <div class="output-desc">
+              <span class="output-title">Total Tip</span>
+              <span class="output-sub">everyone pays</span>
+            </div>
+            <div class="output-value" id="out-tip-total" aria-label="Total tip amount">
+              <span class="value-currency">Rs</span
+              ><span class="value-number" id="val-tip-total">0.00</span>
+            </div>
+          </div>
+
+          <div class="output-divider" aria-hidden="true"></div>
+
+          <div class="output-row">
+            <div class="output-desc">
+              <span class="output-title">Grand Total</span>
+              <span class="output-sub">bill + tip</span>
+            </div>
+            <div class="output-value" id="out-grand-total" aria-label="Grand total">
+              <span class="value-currency">Rs</span
+              ><span class="value-number" id="val-grand-total">0.00</span>
+            </div>
+          </div>
+
+          <div class="output-divider output-divider--thick" aria-hidden="true"></div>
+
+          <div class="output-row output-row--hero">
+            <div class="output-desc">
+              <span class="output-title">Per Person</span>
+              <span class="output-sub">bill + tip share</span>
+            </div>
+            <div class="output-value output-value--hero" id="out-per-person" aria-label="Per person total">
+              <span class="value-currency">Rs</span
+              ><span class="value-number" id="val-per-person">0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounding-note" id="rounding-note" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Rounding policy: per-person amounts are rounded <strong>up</strong> to the nearest paisa — so the group never underpays.</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
